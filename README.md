@@ -19,8 +19,8 @@ cd mainiac
 You can create a new Conda environment with the required dependencies:
 
 ```bash
-conda create -n mainiac_env python=3.9
-conda activate mainiac_env
+conda create -n mainiac python=3.9
+conda activate mainiac
 ```
 
 Then install dependencies (update this list as needed):
