@@ -1,0 +1,33 @@
+2025-06-14 18:37:09 [ERROR] Sequence column 'sequence_aa' not found.
+
+------------------------------------------------------------
+Sender: LSF System <lsfadmin@sysim114>
+Subject: Job 95049: <mainiac_job_5> Exited
+
+Job <mainiac_job_5> was submitted from host <sysim113.sysimm.biken.osaka-u.ac.jp> by user <standley> in cluster <sysimm.local>.
+Job was executed on host(s) <sysim114>, in queue <alma8-batch>, as user <standley> in cluster <sysimm.local>.
+</u22/standley> was used as the home directory.
+</u42/standley/code/git/MAINIAC> was used as the working directory.
+Started at Sat Jun 14 18:37:01 2025
+Results reported at Sat Jun 14 18:37:09 2025
+
+Your job looked like:
+
+------------------------------------------------------------
+# LSBATCH: User input
+/u22/standley/miniconda3/envs/mainiac/bin/python /mounts/u42/standley/code/git/MAINIAC/src/mainiac.py --source_file testData/high/GSM6048277_P21_B1_TCR_bulk_PBMC.tsv --seq_col_name sequence_aa --sep t --ref_v testData/ighv.F.X.ref --ref_j testData/ighj.ref --output_file high_out/GSM6048277_P21_B1_TCR_bulk_PBMC.out.csv
+------------------------------------------------------------
+
+Exited with exit code 1.
+
+Resource usage summary:
+
+    CPU time   :      2.41 sec.
+    Max Memory :         2 MB
+    Max Swap   :        87 MB
+
+    Max Processes  :         1
+    Max Threads    :         1
+
+The output (if any) is above this job summary.
+
