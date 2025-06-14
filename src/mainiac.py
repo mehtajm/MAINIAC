@@ -12,6 +12,11 @@ import shutil
 import re
 import logging
 from pathlib import Path
+import os
+
+bin_path = Path(__file__).resolve().parent / "backend" / ".." / ".." / "bin"
+converter_exec = bin_path / "MafftGapConverter"
+concat_exec = bin_path / "concatenate"
 
 def cleanData(args):
     """Remove leading './' from all string arguments in args."""
@@ -54,7 +59,7 @@ def alignJ(args, pypath, path):
     mafftAlign.append(f"mafft --addfragments query_sequences.fa --compactmapout --thread -1 {path}/{args.refJ} > /dev/null")
     os.system(mafftAlign[-1])
     print("Aligned sequences. Now extracting J regions and V + CDR3 regions.")
-    os.system(f"g++ -o MafftGapConverter {pypath}/backend/MafftGapConverter.cpp")
+    #os.system(f"g++ -o MafftGapConverter {pypath}/backend/MafftGapConverter.cpp")
     os.system("./MafftGapConverter query_sequences.fa query_sequences.fa.map delete.fa query j")
     os.system("mv query query_vSeqs.fa && rm delete.fa")
     alignV(args, pypath, path)
@@ -67,9 +72,9 @@ def alignV(args, pypath, path):
     os.system(f"mafft --addfragments query_jSeqs.fa --compactmapout --thread -1 {path}/{args.refJ} > mafftoutJ")
     os.system("./MafftGapConverter query_jSeqs.fa query_jSeqs.fa.map mafftoutJ j.number.csv")
     print("now concatenating")
-    os.system(f"g++ -o concatenate {pypath}/backend/concatenate.cpp &&"
-	      "./concatenate v.number.csv j.number.csv out.csv")
-    os.system("rm concatenate && rm MafftGapConverter")
+    #os.system(f"g++ -o concatenate {pypath}/backend/concatenate.cpp &&"              
+    os.system("./concatenate v.number.csv j.number.csv out.csv")
+    #os.system("rm concatenate && rm MafftGapConverter")
     print('Completed. Concatenated csv saved to "out.csv"')
 def parseArgs():
     parser = argparse.ArgumentParser(

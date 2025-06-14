@@ -1,0 +1,12 @@
+name: mainiac
+channels:
+  - defaults
+  - conda-forge
+dependencies:
+  - python=3.9
+  - pandas
+  - numpy
+  - biopython
+  - pip
+  - pip:
+      # Add any pip-only packages here if needed
