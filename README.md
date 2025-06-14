@@ -41,7 +41,7 @@ This will compile the C++ tools (`MafftGapConverter` and `concatenate`) into the
 
 ---
 
-## 🚀 Usage
+##  Usage
 
 ### Prepare the input data
 
@@ -62,7 +62,7 @@ python ./src/mainiac.py \
   --output_file filtered_IGH
 ```
 
-a bash script has been provided: `_run_mainiac.sh`
+a bash script has been provided: `run_mainiac.sh`
 
 ### MAINIAC multiple files
 
