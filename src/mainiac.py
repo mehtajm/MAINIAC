@@ -1,101 +1,151 @@
-# Jai Mehta
-# 03/26/2025
-# Python wrapper for MAFFT Insertions
-import os, sys, glob
-import numpy as np
-import pandas as pd
-import getpass
-import subprocess
-import argparse
-import importlib
+import sys
 import shutil
-import re
-import logging
+import tempfile
+import argparse
+import subprocess
 from pathlib import Path
-import os
+import pandas as pd
+import logging
 
-bin_path = Path(__file__).resolve().parent / "backend" / ".." / ".." / "bin"
-converter_exec = bin_path / "MafftGapConverter"
-concat_exec = bin_path / "concatenate"
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S"
+)
 
-def cleanData(args):
-    """Remove leading './' from all string arguments in args."""
-    for key, value in vars(args).items():
-        if isinstance(value, str) and value.startswith("./"):
-            setattr(args, key, value[2:])
-    makeFasta(args)
+# Paths to external executables (bin directory is one level above 'src')
+BIN_DIR = Path(__file__).resolve().parent.parent / "bin"
+CONVERTER = BIN_DIR / "MafftGapConverter"
+CONCATENATOR = BIN_DIR / "concatenate"
 
-def makeFasta(args):
-    print("Making fasta file from input file")
-    try:
-        data = pd.read_csv(
-            args.source, delimiter=args.sep, engine="python", quotechar='"', on_bad_lines="skip"
-        )
-    except Exception as e:
-        sys.exit(f"Error reading input file: {e}")
-    path = str(os.path.abspath(os.getcwd()))
-    pypath = str(Path(__file__).parent.absolute())
-    if args.seqCol not in data.columns:
-        sys.exit(f"Error: Column '{args.seqCol}' not found in the input file.")
 
-    seqs = data[args.seqCol].dropna()  # Drop NaN values to avoid writing "nan" in the output
-
-    # Create output directory if it doesn't exist
-    os.makedirs(args.output, exist_ok=True)
-
-    # Change working directory
-    os.chdir(args.output)
-
-    # Write sequences to a FASTA file
-    with open("query_sequences.fa", "w") as file:
-        for i, seq in enumerate(seqs):
-            file.write(f">q{i}\n{seq.strip()}\n")  # Correct FASTA format
-    print(f'File created successfully, named "query_sequences.fa"\n')
-    alignJ(args, pypath, path)
-
-def alignJ(args, pypath, path):
-    print("Aligning J sequences using MAFFT.")
-    mafftAlign = []
-    mafftAlign.append(f"mafft --addfragments query_sequences.fa --compactmapout --thread -1 {path}/{args.refJ} > /dev/null")
-    os.system(mafftAlign[-1])
-    print("Aligned sequences. Now extracting J regions and V + CDR3 regions.")
-    #os.system(f"g++ -o MafftGapConverter {pypath}/backend/MafftGapConverter.cpp")
-    os.system("./MafftGapConverter query_sequences.fa query_sequences.fa.map delete.fa query j")
-    os.system("mv query query_vSeqs.fa && rm delete.fa")
-    alignV(args, pypath, path)
-
-def alignV(args, pypath, path):
-    print("Aligning v + cdr3 sequences")
-    os.system(f"mafft --addfragments query_vSeqs.fa --compactmapout --thread -1 {path}/{args.refV} > mafftoutV")
-    os.system("./MafftGapConverter query_vSeqs.fa query_vSeqs.fa.map mafftoutV v.number.csv")
-    print("Aligned v + cdr3 sequences to v.number.csv. Aligning j sequences to j.number.csv")
-    os.system(f"mafft --addfragments query_jSeqs.fa --compactmapout --thread -1 {path}/{args.refJ} > mafftoutJ")
-    os.system("./MafftGapConverter query_jSeqs.fa query_jSeqs.fa.map mafftoutJ j.number.csv")
-    print("now concatenating")
-    #os.system(f"g++ -o concatenate {pypath}/backend/concatenate.cpp &&"              
-    os.system("./concatenate v.number.csv j.number.csv out.csv")
-    #os.system("rm concatenate && rm MafftGapConverter")
-    print('Completed. Concatenated csv saved to "out.csv"')
-def parseArgs():
+def parse_args():
     parser = argparse.ArgumentParser(
-        prog = 'Mafft-based Adaptive Immune Numbering and Immunoglobulin or Antibody Concatenation (MAINIAC)',
-        description='Given amino acid sequences, the program uses MAFFT to align query sequences to reference files, and assigns a numbering scheme. ')
-    parser.add_argument('--source_file', dest='source', required=True,
-                        help='Source file containing sequences.')
-    parser.add_argument('--seq_col_name', dest='seqCol', required=True,
-                        help='The sequence column name in the source file that contains the sequences.')
-    parser.add_argument('--sep', dest='sep', required=False, default='\t',
-                        help="Used to specify the separator of the input file is (optional, default '\t').")
-    parser.add_argument('--ref_v', dest='refV', required=True, 
-                        help='Reference file of V genes, in fasta format.')
-    parser.add_argument('--ref_j', dest='refJ', required=True,
-                        help='Reference file of J genes, in fasta format.')
-    parser.add_argument('--output_folder', dest='output', default="output",
-                        help='Output folder name.')
-    return parser.parse_args()
+        prog="Maine Pythonic MAINIAC",
+        description="Align and number immune sequences using MAFFT and custom tools."
+    )
+    parser.add_argument(
+        "--source_file", dest="source", type=Path, required=True,
+        help="TSV/CSV source with sequence column."
+    )
+    parser.add_argument(
+        "--seq_col_name", dest="seq_col", required=True,
+        help="Name of the column with sequences."
+    )
+    parser.add_argument(
+        "--sep", dest="sep", default="\t",
+        help="Field separator (default: tab)."
+    )
+    parser.add_argument(
+        "--ref_v", dest="ref_v", type=Path, required=True,
+        help="FASTA reference for V genes."
+    )
+    parser.add_argument(
+        "--ref_j", dest="ref_j", type=Path, required=True,
+        help="FASTA reference for J genes."
+    )
+    parser.add_argument(
+        "--output_folder", dest="output", type=Path, default=Path("output"),
+        help="Directory for final files (default './output')."
+    )
+    parser.add_argument(
+        "--keep-temp", dest="keep_temp", action="store_true",
+        help="Retain intermediate temp files for debugging."
+    )
+    args = parser.parse_args()
+    args.source = args.source.resolve()
+    args.ref_v = args.ref_v.resolve()
+    args.ref_j = args.ref_j.resolve()
+    return args
 
+
+def run(cmd, cwd=None):
+    logging.info(f"Running: {cmd}")
+    subprocess.run(cmd, shell=True, check=True, cwd=cwd)
+
+
+def main():
+    args = parse_args()
+    try:
+        df = pd.read_csv(args.source, sep=args.sep, engine="python", on_bad_lines="skip")
+    except Exception as e:
+        logging.error(f"Failed to read {args.source}: {e}")
+        sys.exit(1)
+
+    if args.seq_col not in df.columns:
+        logging.error(f"Sequence column '{args.seq_col}' not found.")
+        sys.exit(1)
+
+    sequences = df[args.seq_col].dropna().astype(str)
+    args.output.mkdir(parents=True, exist_ok=True)
+
+    # create temp dir manually
+    tmpdir = tempfile.mkdtemp(prefix="mainiac_", dir="/tmp")
+    tmp = Path(tmpdir)
+    success = False
+    try:
+        # 0) write input FASTA
+        input_fa = tmp / "queries.fa"
+        with input_fa.open("w") as f:
+            for i, seq in enumerate(sequences):
+                f.write(f">q{i}\n{seq.strip()}\n")
+
+        # 1) Initial J alignment + split
+        run(f"mafft --addfragments {input_fa} --compactmapout --thread 1 {args.ref_j} > /dev/null", cwd=tmp)
+        j_map = tmp / f"{input_fa.name}.map"
+        run(f"{CONVERTER} {input_fa} {j_map} delete.fa query j", cwd=tmp)
+        (tmp / "query").rename(tmp / "query_vSeqs.fa")
+        # converter creates query_jSeqs.fa
+
+        # 2) V+CDR3 alignment + V numbering
+        v_in = tmp / "query_vSeqs.fa"
+        v_out = tmp / "mafft_v.out"
+        run(f"mafft --addfragments {v_in} --compactmapout --thread 1 {args.ref_v} > {v_out}", cwd=tmp)
+        v_map = tmp / f"{v_in.name}.map"
+        run(f"{CONVERTER} {v_in} {v_map} {v_out} v.number.csv", cwd=tmp)
+
+        # 3) J fragment alignment + J numbering
+        j_in = tmp / "query_jSeqs.fa"
+        j_out = tmp / "mafft_j2.out"
+        run(f"mafft --addfragments {j_in} --compactmapout --thread 1 {args.ref_j} > {j_out}", cwd=tmp)
+        j_map2 = tmp / f"{j_in.name}.map"
+        run(f"{CONVERTER} {j_in} {j_map2} {j_out} j.number.csv", cwd=tmp)
+
+        # 4) Concatenate results
+        run(f"{CONCATENATOR} v.number.csv j.number.csv out.csv", cwd=tmp)
+
+        # Move outputs: final CSVs
+        for fn in ["out.csv", "v.number.csv", "j.number.csv"]:
+            shutil.move(str(tmp / fn), str(args.output / fn))
+
+        # Also copy aligned FASTA & map files for inspection
+        align_files = [
+            input_fa.name,
+            f"{input_fa.name}.map",
+            v_in.name,
+            f"{v_in.name}.map",
+            j_in.name,
+            f"{j_in.name}.map",
+            v_out.name,
+            j_out.name
+        ]
+        for fn in align_files:
+            src = tmp / fn
+            if src.exists():
+                shutil.move(str(src), str(args.output / fn))
+
+        success = True
+        logging.info(f"Finished. Results in {args.output}")
+    except subprocess.CalledProcessError as e:
+        logging.error(f"Pipeline failed: {e}")
+        sys.exit(1)
+    finally:
+        if args.keep_temp or not success:
+            logging.info(f"Retained temp directory: {tmpdir}")
+        else:
+            shutil.rmtree(tmpdir)
 
 
 if __name__ == "__main__":
-    args = parseArgs()
-    cleanData(args)
+    main()
