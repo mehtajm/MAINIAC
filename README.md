@@ -98,6 +98,7 @@ mainiac/
 ├── src/
 │   ├── backend/            # C++ source files
 │   └── mainiac.py          # Main Python script
+│   └── run_mainiac.py      # Batch Python driver script
 ├── testData/               # Sample input files
 ├── input.gz                # Compressed test input
 ├── Makefile
