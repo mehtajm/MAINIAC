@@ -46,17 +46,19 @@ def parse_args():
         help="FASTA reference for J genes."
     )
     parser.add_argument(
-        "--output_folder", dest="output", type=Path, default=Path("output"),
-        help="Directory for final files (default './output')."
+    "--output_file", dest="output_file", type=Path, required=True,
+    help="Final output CSV filename (e.g. 'something.out.csv')"
     )
+
     parser.add_argument(
         "--keep-temp", dest="keep_temp", action="store_true",
         help="Retain intermediate temp files for debugging."
     )
+    parser.add_argument(
+        "--keep-align", dest="keep_align", action="store_true",
+        help="Retain intermediate alignment files."
+    )
     args = parser.parse_args()
-    args.source = args.source.resolve()
-    args.ref_v = args.ref_v.resolve()
-    args.ref_j = args.ref_j.resolve()
     return args
 
 
@@ -67,8 +69,18 @@ def run(cmd, cwd=None):
 
 def main():
     args = parse_args()
+
+    source = args.source.resolve()
+    ref_v = args.ref_v.resolve()
+    ref_j = args.ref_j.resolve()
+    output_file = args.output_file.resolve()
+    output_dir = output_file.parent
+    output_dir.mkdir(parents=True, exist_ok=True)
+
+    
+
     try:
-        df = pd.read_csv(args.source, sep=args.sep, engine="python", on_bad_lines="skip")
+        df = pd.read_csv(source, sep=args.sep, engine="python", on_bad_lines="skip")
     except Exception as e:
         logging.error(f"Failed to read {args.source}: {e}")
         sys.exit(1)
@@ -78,7 +90,7 @@ def main():
         sys.exit(1)
 
     sequences = df[args.seq_col].dropna().astype(str)
-    args.output.mkdir(parents=True, exist_ok=True)
+
 
     # create temp dir manually
     tmpdir = tempfile.mkdtemp(prefix="mainiac_", dir="/tmp")
@@ -92,7 +104,7 @@ def main():
                 f.write(f">q{i}\n{seq.strip()}\n")
 
         # 1) Initial J alignment + split
-        run(f"mafft --addfragments {input_fa} --compactmapout --thread 1 {args.ref_j} > /dev/null", cwd=tmp)
+        run(f"mafft --addfragments {input_fa} --compactmapout --thread 1 {ref_j} > /dev/null", cwd=tmp)
         j_map = tmp / f"{input_fa.name}.map"
         run(f"{CONVERTER} {input_fa} {j_map} delete.fa query j", cwd=tmp)
         (tmp / "query").rename(tmp / "query_vSeqs.fa")
@@ -101,14 +113,14 @@ def main():
         # 2) V+CDR3 alignment + V numbering
         v_in = tmp / "query_vSeqs.fa"
         v_out = tmp / "mafft_v.out"
-        run(f"mafft --addfragments {v_in} --compactmapout --thread 1 {args.ref_v} > {v_out}", cwd=tmp)
+        run(f"mafft --addfragments {v_in} --compactmapout --thread 1 {ref_v} > {v_out}", cwd=tmp)
         v_map = tmp / f"{v_in.name}.map"
         run(f"{CONVERTER} {v_in} {v_map} {v_out} v.number.csv", cwd=tmp)
 
         # 3) J fragment alignment + J numbering
         j_in = tmp / "query_jSeqs.fa"
         j_out = tmp / "mafft_j2.out"
-        run(f"mafft --addfragments {j_in} --compactmapout --thread 1 {args.ref_j} > {j_out}", cwd=tmp)
+        run(f"mafft --addfragments {j_in} --compactmapout --thread 1 {ref_j} > {j_out}", cwd=tmp)
         j_map2 = tmp / f"{j_in.name}.map"
         run(f"{CONVERTER} {j_in} {j_map2} {j_out} j.number.csv", cwd=tmp)
 
@@ -116,27 +128,30 @@ def main():
         run(f"{CONCATENATOR} v.number.csv j.number.csv out.csv", cwd=tmp)
 
         # Move outputs: final CSVs
-        for fn in ["out.csv", "v.number.csv", "j.number.csv"]:
-            shutil.move(str(tmp / fn), str(args.output / fn))
+        #for fn in ["out.csv", "v.number.csv", "j.number.csv"]:
+        #    shutil.move(str(tmp / fn), str(output_dir / fn))
+        shutil.move(str(tmp / "out.csv"), str(output_file))
 
-        # Also copy aligned FASTA & map files for inspection
-        align_files = [
-            input_fa.name,
-            f"{input_fa.name}.map",
-            v_in.name,
-            f"{v_in.name}.map",
-            j_in.name,
-            f"{j_in.name}.map",
-            v_out.name,
-            j_out.name
-        ]
-        for fn in align_files:
-            src = tmp / fn
-            if src.exists():
-                shutil.move(str(src), str(args.output / fn))
+        if args.keep_align:
+            # Also copy aligned FASTA & map files for inspection
+            
+            align_files = [
+                input_fa.name,
+                f"{input_fa.name}.map",
+                v_in.name,
+                f"{v_in.name}.map",
+                j_in.name,
+                f"{j_in.name}.map",
+                v_out.name,
+                j_out.name
+            ]
+            for fn in align_files:
+                src = tmp / fn
+                if src.exists():
+                    shutil.move(str(src), str(output_dir / fn))
 
         success = True
-        logging.info(f"Finished. Results in {args.output}")
+        logging.info(f"Finished. Results in {args.output_file}")
     except subprocess.CalledProcessError as e:
         logging.error(f"Pipeline failed: {e}")
         sys.exit(1)

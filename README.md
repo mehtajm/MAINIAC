@@ -51,7 +51,7 @@ Unzip and extract the test input files:
 gunzip input.gz && tar -xvf input
 ```
 
-### Run MAINIAC
+### MAINIAC a single file
 
 ```bash
 python ./src/mainiac.py \
@@ -59,12 +59,26 @@ python ./src/mainiac.py \
   --seq_col_name sequence_aa \
   --ref_v ./testData/ighv.F.X.ref \
   --ref_j ./testData/ighj.ref \
-  --output filtered_IGH
+  --output_file filtered_IGH
 ```
+
+a bash script has been provided: `_run_mainiac.sh`
+
+### MAINIAC multiple files
+
+
+```bash
+python ./src/run_mainiac.py \
+  -i ./testData/high \
+  --seq_col_name sequence_aa \
+  -o high_out
+```
+
+A bash script has been provided `run_run_mainiac.sh`
 
 ---
 
-## 🛠 Development Notes
+## Development Notes
 
 - C++ executables are expected in the `bin/` directory after running `make`.
 - If you modify any `.cpp` files in `src/backend/`, rerun `make` to recompile.
