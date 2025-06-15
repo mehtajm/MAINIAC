@@ -42,10 +42,15 @@ def csvs_to_db(csv_files, db_dir, *, len_sort=False, clonotype=False, save_msa=F
     db_dir = Path(db_dir)
     db_dir.mkdir(parents=True, exist_ok=True)
 
+
+
+
     # 1) fix each CSV in-place so merge_CDRs can parse it
-    for csv_path in csv_files:
+    #    enumerate so we know which subject (file) each row came from
+    for subject_idx, csv_path in enumerate(csv_files):
         df = pd.read_csv(csv_path)
-        df["Id"] = df.index.astype(int)
+        # prefix the local row‐index with the subject index
+        df["Id"] = f"{subject_idx}-" + df.index.astype(str)
         df["e-value"] = 0.0
         if "sequence_id" in df.columns:
             df.drop(columns=["sequence_id"], inplace=True)
