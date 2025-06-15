@@ -1,0 +1,410 @@
+2025-06-15 09:32:12 [INFO] Running: mafft --addfragments /tmp/mainiac_zgsieqgv/queries.fa --compactmapout --thread 1 /mounts/u42/standley/code/git/MAINIAC/testData/ighj.ref > /dev/null
+distout=h
+nadd = 9
+rescale = 1
+    0 / 15 (thread    0)dndpre (aa) Version 7.526
+alg=X, model=BLOSUM62, 2.00, -0.10, +0.10, noshift, amax=0.0
+1 thread(s)
+
+rescale = 1
+All-to-all alignment.
+
+
+##### writing hat3
+pairlocalalign (aa) Version 7.526
+alg=Y, model=BLOSUM62, 2.00, -0.10, +0.10, noshift, amax=0.0
+1 thread(s)
+
+nadd = 9
+ppenalty_ex = -10
+nthread = 1
+blosum 62 / kimura 200
+sueff_global = 0.100000
+norg = 15
+njobc = 16
+Loading 'hat3' ... 
+done.
+rescale = 1
+Loading 'hat2n' (aligned sequences - new sequences) ... done.
+Loading 'hat2i' (aligned sequences) ... done.
+STEP 0 / 9 (thread 0)                    cSTEP 1 / 9 (thread 0)                    cSTEP 2 / 9 (thread 0)                    cSTEP 3 / 9 (thread 0)                    cSTEP 4 / 9 (thread 0)                    cSTEP 5 / 9 (thread 0)                    cSTEP 6 / 9 (thread 0)                    cSTEP 7 / 9 (thread 0)                    cSTEP 8 / 9 (thread 0)                    c
+
+Combining ..
+0 / 9 0 / 9   done.                      
+
+   done.                      
+
+addsingle (aa) Version 7.526
+alg=A, model=BLOSUM62, 1.53, -0.00, +0.01, noshift, amax=0.0
+1 thread(s)
+
+
+To keep the alignment length, 856 letters were DELETED.
+The deleted letters are shown in the (filename).map file.
+
+Strategy:
+ Multi-INS-fragment (Not tested.)
+ ?
+
+If unsure which option to use, try 'mafft --auto input > output'.
+For more information, see 'mafft --help', 'mafft --man' and the mafft page.
+
+The default gap scoring scheme has been changed in version 7.110 (2013 Oct).
+It tends to insert more gaps into gap-rich regions than previous versions.
+To disable this change, add the --leavegappyregion option.
+
+2025-06-15 09:32:13 [INFO] Running: /mounts/u42/standley/code/git/MAINIAC/bin/MafftGapConverter /tmp/mainiac_zgsieqgv/queries.fa /tmp/mainiac_zgsieqgv/queries.fa.map delete.fa query j
+Mafft output fasta file did not open properly. Writing an empty one for assumed J sequence.
+If this is not what you wanted, hit ctrl + c and try again.
+WARNING: Your output file "query" does not contain ".fa" file type. The cleaved J sequences will be added to "query_jSeqs.fa", while your output file will remain the same.
+2025-06-15 09:32:13 [INFO] Running: mafft --addfragments /tmp/mainiac_zgsieqgv/query_vSeqs.fa --compactmapout --thread 1 /mounts/u42/standley/code/git/MAINIAC/testData/ighv.F.X.ref > /tmp/mainiac_zgsieqgv/mafft_v.out
+distout=h
+nadd = 9
+rescale = 1
+    0 / 262 (thread    0)  100 / 262 (thread    0)  200 / 262 (thread    0)dndpre (aa) Version 7.526
+alg=X, model=BLOSUM62, 2.00, -0.10, +0.10, noshift, amax=0.0
+1 thread(s)
+
+rescale = 1
+All-to-all alignment.
+
+
+##### writing hat3
+pairlocalalign (aa) Version 7.526
+alg=Y, model=BLOSUM62, 2.00, -0.10, +0.10, noshift, amax=0.0
+1 thread(s)
+
+nadd = 9
+ppenalty_ex = -10
+nthread = 1
+blosum 62 / kimura 200
+sueff_global = 0.100000
+norg = 262
+njobc = 263
+Loading 'hat3' ... 
+done.
+rescale = 1
+Loading 'hat2n' (aligned sequences - new sequences) ... done.
+Loading 'hat2i' (aligned sequences) ... done.
+STEP 0 / 9 (thread 0)                    cSTEP 1 / 9 (thread 0)                    cSTEP 2 / 9 (thread 0)                    cSTEP 3 / 9 (thread 0)                    cSTEP 4 / 9 (thread 0)                    cSTEP 5 / 9 (thread 0)                    cSTEP 6 / 9 (thread 0)                    cSTEP 7 / 9 (thread 0)                    cSTEP 8 / 9 (thread 0)                    c
+
+Combining ..
+0 / 9 0 / 9   done.                      
+
+   done.                      
+
+addsingle (aa) Version 7.526
+alg=A, model=BLOSUM62, 1.53, -0.00, +0.01, noshift, amax=0.0
+1 thread(s)
+
+
+To keep the alignment length, 1 letters were DELETED.
+The deleted letters are shown in the (filename).map file.
+
+Strategy:
+ Multi-INS-fragment (Not tested.)
+ ?
+
+If unsure which option to use, try 'mafft --auto input > output'.
+For more information, see 'mafft --help', 'mafft --man' and the mafft page.
+
+The default gap scoring scheme has been changed in version 7.110 (2013 Oct).
+It tends to insert more gaps into gap-rich regions than previous versions.
+To disable this change, add the --leavegappyregion option.
+
+2025-06-15 09:32:13 [INFO] Running: /mounts/u42/standley/code/git/MAINIAC/bin/MafftGapConverter /tmp/mainiac_zgsieqgv/query_vSeqs.fa /tmp/mainiac_zgsieqgv/query_vSeqs.fa.map /tmp/mainiac_zgsieqgv/mafft_v.out v.number.csv
+2025-06-15 09:32:13 [INFO] Running: mafft --addfragments /tmp/mainiac_zgsieqgv/query_jSeqs.fa --compactmapout --thread 1 /mounts/u42/standley/code/git/MAINIAC/testData/ighj.ref > /tmp/mainiac_zgsieqgv/mafft_j2.out
+distout=h
+nadd = 9
+rescale = 1
+    0 / 15 (thread    0)dndpre (aa) Version 7.526
+alg=X, model=BLOSUM62, 2.00, -0.10, +0.10, noshift, amax=0.0
+1 thread(s)
+
+rescale = 1
+All-to-all alignment.
+
+
+##### writing hat3
+pairlocalalign (aa) Version 7.526
+alg=Y, model=BLOSUM62, 2.00, -0.10, +0.10, noshift, amax=0.0
+1 thread(s)
+
+nadd = 9
+ppenalty_ex = -10
+nthread = 1
+blosum 62 / kimura 200
+sueff_global = 0.100000
+norg = 15
+njobc = 16
+Loading 'hat3' ... 
+done.
+rescale = 1
+Loading 'hat2n' (aligned sequences - new sequences) ... done.
+Loading 'hat2i' (aligned sequences) ... done.
+STEP 0 / 9 (thread 0)                    cSTEP 1 / 9 (thread 0)                    cSTEP 2 / 9 (thread 0)                    cSTEP 3 / 9 (thread 0)                    cSTEP 4 / 9 (thread 0)                    cSTEP 5 / 9 (thread 0)                    cSTEP 6 / 9 (thread 0)                    cSTEP 7 / 9 (thread 0)                    cSTEP 8 / 9 (thread 0)                    c
+
+Combining ..
+0 / 9 0 / 9   done.                      
+
+   done.                      
+
+addsingle (aa) Version 7.526
+alg=A, model=BLOSUM62, 1.53, -0.00, +0.01, noshift, amax=0.0
+1 thread(s)
+
+
+To keep the alignment length, 346 letters were DELETED.
+The deleted letters are shown in the (filename).map file.
+
+Strategy:
+ Multi-INS-fragment (Not tested.)
+ ?
+
+If unsure which option to use, try 'mafft --auto input > output'.
+For more information, see 'mafft --help', 'mafft --man' and the mafft page.
+
+The default gap scoring scheme has been changed in version 7.110 (2013 Oct).
+It tends to insert more gaps into gap-rich regions than previous versions.
+To disable this change, add the --leavegappyregion option.
+
+2025-06-15 09:32:13 [INFO] Running: /mounts/u42/standley/code/git/MAINIAC/bin/MafftGapConverter /tmp/mainiac_zgsieqgv/query_jSeqs.fa /tmp/mainiac_zgsieqgv/query_jSeqs.fa.map /tmp/mainiac_zgsieqgv/mafft_j2.out j.number.csv
+2025-06-15 09:32:13 [INFO] Running: /mounts/u42/standley/code/git/MAINIAC/bin/concatenate v.number.csv j.number.csv out.csv
+2025-06-15 09:32:13 [INFO] Finished. Results in tiny_high_out/GSM6048262_P05_B1_TCR_bulk_PBMC_tiny.out.csv
+
+------------------------------------------------------------
+Sender: LSF System <lsfadmin@sysimm07.sysimm.biken.osaka-u.ac.jp>
+Subject: Job 95525: <mainiac_job_0> Done
+
+Job <mainiac_job_0> was submitted from host <sysim113.sysimm.biken.osaka-u.ac.jp> by user <standley> in cluster <sysimm.local>.
+Job was executed on host(s) <sysimm07.sysimm.biken.osaka-u.ac.jp>, in queue <alma8-batch>, as user <standley> in cluster <sysimm.local>.
+</u22/standley> was used as the home directory.
+</u42/standley/code/git/MAINIAC> was used as the working directory.
+Started at Sun Jun 15 09:32:11 2025
+Results reported at Sun Jun 15 09:32:13 2025
+
+Your job looked like:
+
+------------------------------------------------------------
+# LSBATCH: User input
+/u22/standley/miniconda3/envs/mainiac/bin/python /mounts/u42/standley/code/git/MAINIAC/src/mainiac.py --source_file testData/tiny_high/GSM6048262_P05_B1_TCR_bulk_PBMC_tiny.tsv --seq_col_name sequence_aa --output_file tiny_high_out/GSM6048262_P05_B1_TCR_bulk_PBMC_tiny.out.csv
+------------------------------------------------------------
+
+Successfully completed.
+
+Resource usage summary:
+
+    CPU time   :      1.45 sec.
+    Max Memory :         2 MB
+    Max Swap   :        84 MB
+
+    Max Processes  :         1
+    Max Threads    :         1
+
+The output (if any) is above this job summary.
+
+2025-06-15 09:47:17 [INFO] Running: mafft --addfragments /tmp/mainiac_j28bxgy7/queries.fa --compactmapout --thread 1 /mounts/u42/standley/code/git/MAINIAC/testData/ighj.ref > /dev/null
+distout=h
+nadd = 9
+rescale = 1
+    0 / 15 (thread    0)dndpre (aa) Version 7.526
+alg=X, model=BLOSUM62, 2.00, -0.10, +0.10, noshift, amax=0.0
+1 thread(s)
+
+rescale = 1
+All-to-all alignment.
+
+
+##### writing hat3
+pairlocalalign (aa) Version 7.526
+alg=Y, model=BLOSUM62, 2.00, -0.10, +0.10, noshift, amax=0.0
+1 thread(s)
+
+nadd = 9
+ppenalty_ex = -10
+nthread = 1
+blosum 62 / kimura 200
+sueff_global = 0.100000
+norg = 15
+njobc = 16
+Loading 'hat3' ... 
+done.
+rescale = 1
+Loading 'hat2n' (aligned sequences - new sequences) ... done.
+Loading 'hat2i' (aligned sequences) ... done.
+STEP 0 / 9 (thread 0)                    cSTEP 1 / 9 (thread 0)                    cSTEP 2 / 9 (thread 0)                    cSTEP 3 / 9 (thread 0)                    cSTEP 4 / 9 (thread 0)                    cSTEP 5 / 9 (thread 0)                    cSTEP 6 / 9 (thread 0)                    cSTEP 7 / 9 (thread 0)                    cSTEP 8 / 9 (thread 0)                    c
+
+Combining ..
+0 / 9 0 / 9   done.                      
+
+   done.                      
+
+addsingle (aa) Version 7.526
+alg=A, model=BLOSUM62, 1.53, -0.00, +0.01, noshift, amax=0.0
+1 thread(s)
+
+
+To keep the alignment length, 856 letters were DELETED.
+The deleted letters are shown in the (filename).map file.
+
+Strategy:
+ Multi-INS-fragment (Not tested.)
+ ?
+
+If unsure which option to use, try 'mafft --auto input > output'.
+For more information, see 'mafft --help', 'mafft --man' and the mafft page.
+
+The default gap scoring scheme has been changed in version 7.110 (2013 Oct).
+It tends to insert more gaps into gap-rich regions than previous versions.
+To disable this change, add the --leavegappyregion option.
+
+2025-06-15 09:47:17 [INFO] Running: /mounts/u42/standley/code/git/MAINIAC/bin/MafftGapConverter /tmp/mainiac_j28bxgy7/queries.fa /tmp/mainiac_j28bxgy7/queries.fa.map delete.fa query j
+Mafft output fasta file did not open properly. Writing an empty one for assumed J sequence.
+If this is not what you wanted, hit ctrl + c and try again.
+WARNING: Your output file "query" does not contain ".fa" file type. The cleaved J sequences will be added to "query_jSeqs.fa", while your output file will remain the same.
+2025-06-15 09:47:17 [INFO] Running: mafft --addfragments /tmp/mainiac_j28bxgy7/query_vSeqs.fa --compactmapout --thread 1 /mounts/u42/standley/code/git/MAINIAC/testData/ighv.F.X.ref > /tmp/mainiac_j28bxgy7/mafft_v.out
+distout=h
+nadd = 9
+rescale = 1
+    0 / 262 (thread    0)  100 / 262 (thread    0)  200 / 262 (thread    0)dndpre (aa) Version 7.526
+alg=X, model=BLOSUM62, 2.00, -0.10, +0.10, noshift, amax=0.0
+1 thread(s)
+
+rescale = 1
+All-to-all alignment.
+
+
+##### writing hat3
+pairlocalalign (aa) Version 7.526
+alg=Y, model=BLOSUM62, 2.00, -0.10, +0.10, noshift, amax=0.0
+1 thread(s)
+
+nadd = 9
+ppenalty_ex = -10
+nthread = 1
+blosum 62 / kimura 200
+sueff_global = 0.100000
+norg = 262
+njobc = 263
+Loading 'hat3' ... 
+done.
+rescale = 1
+Loading 'hat2n' (aligned sequences - new sequences) ... done.
+Loading 'hat2i' (aligned sequences) ... done.
+STEP 0 / 9 (thread 0)                    cSTEP 1 / 9 (thread 0)                    cSTEP 2 / 9 (thread 0)                    cSTEP 3 / 9 (thread 0)                    cSTEP 4 / 9 (thread 0)                    cSTEP 5 / 9 (thread 0)                    cSTEP 6 / 9 (thread 0)                    cSTEP 7 / 9 (thread 0)                    cSTEP 8 / 9 (thread 0)                    c
+
+Combining ..
+0 / 9 0 / 9   done.                      
+
+   done.                      
+
+addsingle (aa) Version 7.526
+alg=A, model=BLOSUM62, 1.53, -0.00, +0.01, noshift, amax=0.0
+1 thread(s)
+
+
+To keep the alignment length, 1 letters were DELETED.
+The deleted letters are shown in the (filename).map file.
+
+Strategy:
+ Multi-INS-fragment (Not tested.)
+ ?
+
+If unsure which option to use, try 'mafft --auto input > output'.
+For more information, see 'mafft --help', 'mafft --man' and the mafft page.
+
+The default gap scoring scheme has been changed in version 7.110 (2013 Oct).
+It tends to insert more gaps into gap-rich regions than previous versions.
+To disable this change, add the --leavegappyregion option.
+
+2025-06-15 09:47:17 [INFO] Running: /mounts/u42/standley/code/git/MAINIAC/bin/MafftGapConverter /tmp/mainiac_j28bxgy7/query_vSeqs.fa /tmp/mainiac_j28bxgy7/query_vSeqs.fa.map /tmp/mainiac_j28bxgy7/mafft_v.out v.number.csv
+2025-06-15 09:47:17 [INFO] Running: mafft --addfragments /tmp/mainiac_j28bxgy7/query_jSeqs.fa --compactmapout --thread 1 /mounts/u42/standley/code/git/MAINIAC/testData/ighj.ref > /tmp/mainiac_j28bxgy7/mafft_j2.out
+distout=h
+nadd = 9
+rescale = 1
+    0 / 15 (thread    0)dndpre (aa) Version 7.526
+alg=X, model=BLOSUM62, 2.00, -0.10, +0.10, noshift, amax=0.0
+1 thread(s)
+
+rescale = 1
+All-to-all alignment.
+
+
+##### writing hat3
+pairlocalalign (aa) Version 7.526
+alg=Y, model=BLOSUM62, 2.00, -0.10, +0.10, noshift, amax=0.0
+1 thread(s)
+
+nadd = 9
+ppenalty_ex = -10
+nthread = 1
+blosum 62 / kimura 200
+sueff_global = 0.100000
+norg = 15
+njobc = 16
+Loading 'hat3' ... 
+done.
+rescale = 1
+Loading 'hat2n' (aligned sequences - new sequences) ... done.
+Loading 'hat2i' (aligned sequences) ... done.
+STEP 0 / 9 (thread 0)                    cSTEP 1 / 9 (thread 0)                    cSTEP 2 / 9 (thread 0)                    cSTEP 3 / 9 (thread 0)                    cSTEP 4 / 9 (thread 0)                    cSTEP 5 / 9 (thread 0)                    cSTEP 6 / 9 (thread 0)                    cSTEP 7 / 9 (thread 0)                    cSTEP 8 / 9 (thread 0)                    c
+
+Combining ..
+0 / 9 0 / 9   done.                      
+
+   done.                      
+
+addsingle (aa) Version 7.526
+alg=A, model=BLOSUM62, 1.53, -0.00, +0.01, noshift, amax=0.0
+1 thread(s)
+
+
+To keep the alignment length, 346 letters were DELETED.
+The deleted letters are shown in the (filename).map file.
+
+Strategy:
+ Multi-INS-fragment (Not tested.)
+ ?
+
+If unsure which option to use, try 'mafft --auto input > output'.
+For more information, see 'mafft --help', 'mafft --man' and the mafft page.
+
+The default gap scoring scheme has been changed in version 7.110 (2013 Oct).
+It tends to insert more gaps into gap-rich regions than previous versions.
+To disable this change, add the --leavegappyregion option.
+
+2025-06-15 09:47:18 [INFO] Running: /mounts/u42/standley/code/git/MAINIAC/bin/MafftGapConverter /tmp/mainiac_j28bxgy7/query_jSeqs.fa /tmp/mainiac_j28bxgy7/query_jSeqs.fa.map /tmp/mainiac_j28bxgy7/mafft_j2.out j.number.csv
+2025-06-15 09:47:18 [INFO] Running: /mounts/u42/standley/code/git/MAINIAC/bin/concatenate v.number.csv j.number.csv out.csv
+2025-06-15 09:47:18 [INFO] Finished. Results in tiny_high_out/GSM6048262_P05_B1_TCR_bulk_PBMC_tiny.out.csv
+
+------------------------------------------------------------
+Sender: LSF System <lsfadmin@sysimm09.sysimm.biken.osaka-u.ac.jp>
+Subject: Job 95530: <a0152cc1-309b-45fa-afac-1762a825070f> Done
+
+Job <a0152cc1-309b-45fa-afac-1762a825070f> was submitted from host <sysim113.sysimm.biken.osaka-u.ac.jp> by user <standley> in cluster <sysimm.local>.
+Job was executed on host(s) <sysimm09.sysimm.biken.osaka-u.ac.jp>, in queue <alma8-batch>, as user <standley> in cluster <sysimm.local>.
+</u22/standley> was used as the home directory.
+</u42/standley/code/git/MAINIAC> was used as the working directory.
+Started at Sun Jun 15 09:47:15 2025
+Results reported at Sun Jun 15 09:47:21 2025
+
+Your job looked like:
+
+------------------------------------------------------------
+# LSBATCH: User input
+/u22/standley/miniconda3/envs/mainiac/bin/python /mounts/u42/standley/code/git/MAINIAC/src/mainiac.py --source_file testData/tiny_high/GSM6048262_P05_B1_TCR_bulk_PBMC_tiny.tsv --seq_col_name sequence_aa --output_file tiny_high_out/GSM6048262_P05_B1_TCR_bulk_PBMC_tiny.out.csv
+------------------------------------------------------------
+
+Successfully completed.
+
+Resource usage summary:
+
+    CPU time   :      1.45 sec.
+    Max Memory :         3 MB
+    Max Swap   :        87 MB
+
+    Max Processes  :         1
+    Max Threads    :         1
+
+The output (if any) is above this job summary.
+

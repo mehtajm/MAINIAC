@@ -19,6 +19,10 @@ BIN_DIR = Path(__file__).resolve().parent.parent / "bin"
 CONVERTER = BIN_DIR / "MafftGapConverter"
 CONCATENATOR = BIN_DIR / "concatenate"
 
+THIS_SRC = Path(__file__).resolve().parent        # …/MAINIAC/src
+PROJECT_ROOT = THIS_SRC.parent                    # …/MAINIAC
+TESTDATA_DIR = PROJECT_ROOT / "testData"          # …/MAINIAC/testData
+
 
 def parse_args():
     parser = argparse.ArgumentParser(
@@ -33,18 +37,21 @@ def parse_args():
         "--seq_col_name", dest="seq_col", required=True,
         help="Name of the column with sequences."
     )
+    #parser.add_argument(
+    #    "--sep", dest="sep", default="TAB",
+    #    help="Field separator (default: tab)."
+    #)
     parser.add_argument(
-        "--sep", dest="sep", default="\t",
-        help="Field separator (default: tab)."
+        "--ref_v", dest="ref_v", type=Path,
+        default=TESTDATA_DIR / "ighv.F.X.ref",
+        help="FASTA reference for V genes (default: “testData/ighv.F.X.ref”).",
     )
     parser.add_argument(
-        "--ref_v", dest="ref_v", type=Path, required=True,
-        help="FASTA reference for V genes."
+        "--ref_j", dest="ref_j", type=Path,
+        default=TESTDATA_DIR / "ighj.ref",
+        help="FASTA reference for J genes (default: “testData/ighj.ref”).",
     )
-    parser.add_argument(
-        "--ref_j", dest="ref_j", type=Path, required=True,
-        help="FASTA reference for J genes."
-    )
+
     parser.add_argument(
     "--output_file", dest="output_file", type=Path, required=True,
     help="Final output CSV filename (e.g. 'something.out.csv')"
@@ -59,6 +66,9 @@ def parse_args():
         help="Retain intermediate alignment files."
     )
     args = parser.parse_args()
+
+    
+    
     return args
 
 
@@ -73,14 +83,27 @@ def main():
     source = args.source.resolve()
     ref_v = args.ref_v.resolve()
     ref_j = args.ref_j.resolve()
+
+
+    if not args.ref_v.exists():
+        raise Exception(f"V-reference not found: {args.ref_v}")
+    if not args.ref_j.exists():
+        raise Exception(f"J-reference not found: {args.ref_j}")
+    
     output_file = args.output_file.resolve()
     output_dir = output_file.parent
     output_dir.mkdir(parents=True, exist_ok=True)
 
-    
+    ext = source.suffix.lower()    
 
+    column_sep='\t'
+    if ext==".csv":
+        column_sep=','
+
+    
     try:
-        df = pd.read_csv(source, sep=args.sep, engine="python", on_bad_lines="skip")
+        
+        df = pd.read_csv(source, sep=column_sep, engine="python", on_bad_lines="skip")
     except Exception as e:
         logging.error(f"Failed to read {args.source}: {e}")
         sys.exit(1)
